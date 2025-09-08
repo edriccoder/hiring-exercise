@@ -1,75 +1,69 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Pressable, StyleSheet, View } from 'react-native';
 
-import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
 export default function HomeScreen() {
+  const router = useRouter();
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
+      headerBackgroundColor={{ light: '#0f172a', dark: '#0b1220' }}
       headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
+        <Image source={require('@/assets/images/overHead/group.png')} style={styles.heroImage} />
+      }
+    >
+      <ThemedView style={styles.headerBlock}>
+        <ThemedText type="title">Build. Stronger.</ThemedText>
+        <ThemedText>{`Curated exercises with videos and clear cues.`}</ThemedText>
+        <Pressable
+          onPress={() => router.push('/(tabs)/exercises')}
+          style={({ pressed }) => [styles.cta, pressed && { opacity: 0.9 }]}
+        >
+          <ThemedText type="defaultSemiBold">Browse Exercises</ThemedText>
+        </Pressable>
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
+
+      <View style={styles.grid}>
+        <Image source={require('@/assets/images/benchPress/bench1.png')} style={styles.gridItem} contentFit="contain" />
+        <Image source={require('@/assets/images/lunges/backandfront1.png')} style={styles.gridItem} contentFit="contain" />
+        <Image source={require('@/assets/images/barbellPush/barbell1.png')} style={styles.gridItem} contentFit="contain" />
+        <Image source={require('@/assets/images/calfRaise/donkey1.png')} style={styles.gridItem} contentFit="contain" />
+      </View>
     </ParallaxScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
+  heroImage: {
+    height: 250,
+    width: '100%',
     bottom: 0,
-    left: 0,
     position: 'absolute',
+  },
+  headerBlock: {
+    gap: 12,
+  },
+  cta: {
+    alignSelf: 'flex-start',
+    backgroundColor: 'rgba(80,160,220,0.25)',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 999,
+    marginTop: 6,
+  },
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+    marginTop: 12,
+  },
+  gridItem: {
+    width: '48%',
+    aspectRatio: 1,
+    borderRadius: 14,
+    overflow: 'hidden',
   },
 });
