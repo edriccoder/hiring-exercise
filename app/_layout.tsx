@@ -23,7 +23,7 @@ function Root() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
-      <StatusBar style="auto" />
+  <StatusBar style={effectiveScheme === 'dark' ? 'light' : 'dark'} />
     </ThemeProvider>
   );
 }

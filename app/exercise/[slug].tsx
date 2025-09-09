@@ -2,16 +2,34 @@ import { MuscleIcon } from '@/components/MuscleIcon';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { getExerciseBySlug } from '@/data/exercises';
-import { ResizeMode, Video } from 'expo-av';
+import { useEvent } from 'expo';
 import { Image } from 'expo-image';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import React, { useMemo } from 'react';
+import { useVideoPlayer, VideoView, type VideoPlayer, type VideoSource } from 'expo-video';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 export default function ExerciseDetailScreen() {
   const router = useRouter();
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const exercise = useMemo(() => (slug ? getExerciseBySlug(slug) : undefined), [slug]);
+  const source: VideoSource | null = useMemo(
+    () => (exercise ? { assetId: exercise.video } : null),
+    [exercise]
+  );
+  const player = useVideoPlayer(source, (p: VideoPlayer) => {
+    p.loop = true;
+  });
+  const { isPlaying } = useEvent(player, 'playingChange', { isPlaying: player.playing });
+  const [overlayVisible, setOverlayVisible] = useState(true);
+  // Keep overlay in sync with player state
+  useEffect(() => {
+    setOverlayVisible(!isPlaying);
+  }, [isPlaying]);
+  // Reset overlay when exercise changes
+  useEffect(() => {
+    setOverlayVisible(true);
+  }, [slug]);
 
   if (!exercise) {
     return (
@@ -75,16 +93,27 @@ export default function ExerciseDetailScreen() {
         <View style={styles.section}>
           <ThemedText type="subtitle">Watch the Video</ThemedText>
           <View style={styles.videoWrap}>
-            <Video
-              source={exercise.video}
+            <VideoView
               style={styles.video}
-              useNativeControls
-              resizeMode={ResizeMode.CONTAIN}
-              isLooping
+              player={player}
+              nativeControls
+              allowsFullscreen
+              allowsPictureInPicture
+              playsInline
+              contentFit="contain"
+              onFirstFrameRender={() => setOverlayVisible(false)}
             />
-            <Pressable style={styles.playFloating}>
-              <ThemedText style={styles.playIcon}>▶</ThemedText>
-            </Pressable>
+            {overlayVisible && (
+              <Pressable
+                style={styles.playFloating}
+                onPress={() => {
+                  player.play();
+                  setOverlayVisible(false);
+                }}
+              >
+                <ThemedText style={styles.playIcon}>▶</ThemedText>
+              </Pressable>
+            )}
           </View>
         </View>
       </ScrollView>
