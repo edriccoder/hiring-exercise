@@ -62,7 +62,7 @@ export const exercises: Exercise[] = [
     title: 'Barbell Push and Press',
     avatar: require('@/assets/images/barbellPush/barbell1.png'),
     image: require('@/assets/images/barbellPush/group.png'),
-    video: require('@/assets/videos/shoulderPress.mp4'),
+    video: require('@/assets/videos/overheadPress.mp4'),
     primaryMuscles: ['shoulders'],
     secondaryMuscles: ['triceps', 'waist'],
     instructions: [
@@ -78,7 +78,7 @@ export const exercises: Exercise[] = [
     title: 'Overhead Shoulder Press',
     avatar: require('@/assets/images/overHead/overhead.png'),
     image: require('@/assets/images/overHead/group.png'),
-    video: require('@/assets/videos/overheadPress.mp4'),
+    video: require('@/assets/videos/shoulderPress.mp4'),
     primaryMuscles: ['shoulders'],
     secondaryMuscles: ['triceps', 'waist'],
     instructions: [
